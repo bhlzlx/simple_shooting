@@ -22,7 +22,7 @@ void Object::update(float deltaTime) {
 
 bool Object::hitTest(Object const& other) const {
     auto ref = pow(other.pos_.x - pos_.x, 2) + pow(other.pos_.y - pos_.y, 2);
-    if(ref < pow(size_+other.size_, 2)) {
+    if(ref < pow(radius_+other.radius_, 2)) {
         return true;
     }
     return false;

@@ -20,9 +20,9 @@ bool MainMenu::init() {
     auto renderContext = getRenderContext();
     char const* items[] = {"START", "EXIT"};
     int sizes[] = {MenuSizeSelect, MenuSizeUnselect};
-    for (size_t i = 0; i < 2; i++) {
-        auto textObj = new TextObject(items[i], sizes[i]);
-        textObj->setPos(120, 100 + i * 80);
+    for (int i = 0; i < 2; i++) {
+        auto textObj = new TextObject(this, items[i], sizes[i]);
+        textObj->setPos(120, (int)100 + i * 80);
         menuItems_.push_back(textObj);
         addObject(textObj);
     }
