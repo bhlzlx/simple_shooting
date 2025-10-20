@@ -16,6 +16,7 @@ public:
     RenderContext();
     bool init(SDL_Renderer* renderer);
     TTF_Text* createText(const char* text, int size);
+    SDL_Renderer* getRenderer() { return renderer; }
     ~RenderContext();
 };
 

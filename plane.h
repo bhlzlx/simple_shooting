@@ -1,8 +1,11 @@
 #pragma once
 #include "object.h"
+#include <cstdint>
 
 class Plane : public Object {
 private:
+    int64_t             shootInterval_;
+    int64_t             timeLastShoot_;
 public:
     Plane(Stage* stage);
     virtual void draw() = 0;
@@ -11,4 +14,5 @@ public:
     void setDirection(int x, int y);
     void update(float deltaTime);
     bool hitTest(Object const& other) const;
+    void shoot();
 };

@@ -14,3 +14,7 @@ void Plane::onHit(Object const* other) {
 bool Plane::hitTest(Object const& other) const {
     return false;
 }
+
+void Plane::shoot() {
+}
+

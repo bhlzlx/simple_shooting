@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include "text_object.h"
 #include "render_context.h"
+#include "bonus_object.h"
 
 static const int MenuSizeSelect = 80;
 static const int MenuSizeUnselect = 64;
@@ -27,6 +28,11 @@ bool MainMenu::init() {
         addObject(textObj);
     }
     selected_ = 0;
+    //
+    auto bonusObj = new BonusObject(this);
+    bonusObj->setPos(200, 200);
+    addObject(bonusObj);
+
     return true;
 }
 void MainMenu::setSelection(int index) {

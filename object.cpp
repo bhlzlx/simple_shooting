@@ -4,6 +4,7 @@
 
 Object::Object(Stage* stage) {
     stage_ = stage;
+    valid_ = true;
 }
 
 void Object::setPos(int x, int y) {

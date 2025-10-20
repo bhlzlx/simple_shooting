@@ -19,6 +19,7 @@ protected:
     vec2_t  direction_;
     float   radius_;
     float   speed_;
+    bool    valid_;
 public:
     Object(Stage* stage);
     void setPos(int x, int y);
