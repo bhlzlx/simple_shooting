@@ -14,7 +14,7 @@ public:
     ~GameStage();
 
     bool init() override;
-    void tick() override;
+    void tick(int64_t) override;
     void handleEvent(SDL_Event* event) override;
 
     virtual void addObject(Object* object) override;

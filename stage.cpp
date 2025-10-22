@@ -6,8 +6,9 @@ Stage::Stage()
 {
 }
 
-void Stage::tick() {
+void Stage::tick(int64_t millisec) {
     for (auto object : _objects) {
+        object->update(millisec);
         object->draw();
     }
 }

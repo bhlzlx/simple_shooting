@@ -10,51 +10,11 @@
 #include <SDL3/SDL_main.h>
 // #include <SDL3/SDL_ttf.h>
 #include "render_context.h"
-#include "main_menu.h"
+// #include "main_menu.h"
+#include "game_stage.h"
 
-#define STEP_RATE_IN_MILLISECONDS  125
-#define SNAKE_BLOCK_SIZE_IN_PIXELS 24
-#define SDL_WINDOW_WIDTH           (SNAKE_BLOCK_SIZE_IN_PIXELS * SNAKE_GAME_WIDTH)
-#define SDL_WINDOW_HEIGHT          (SNAKE_BLOCK_SIZE_IN_PIXELS * SNAKE_GAME_HEIGHT)
-
-#define SNAKE_GAME_WIDTH  24U
-#define SNAKE_GAME_HEIGHT 18U
-#define SNAKE_MATRIX_SIZE (SNAKE_GAME_WIDTH * SNAKE_GAME_HEIGHT)
-
-#define THREE_BITS  0x7U /* ~CHAR_MAX >> (CHAR_BIT - SNAKE_CELL_MAX_BITS) */
-#define SHIFT(x, y) (((x) + ((y) * SNAKE_GAME_WIDTH)) * SNAKE_CELL_MAX_BITS)
-
-typedef enum
-{
-    SNAKE_CELL_NOTHING = 0U,
-    SNAKE_CELL_SRIGHT = 1U,
-    SNAKE_CELL_SUP = 2U,
-    SNAKE_CELL_SLEFT = 3U,
-    SNAKE_CELL_SDOWN = 4U,
-    SNAKE_CELL_FOOD = 5U
-} SnakeCell;
-
-#define SNAKE_CELL_MAX_BITS 3U /* floor(log2(SNAKE_CELL_FOOD)) + 1 */
-
-typedef enum
-{
-    SNAKE_DIR_RIGHT,
-    SNAKE_DIR_UP,
-    SNAKE_DIR_LEFT,
-    SNAKE_DIR_DOWN
-} SnakeDirection;
-
-typedef struct
-{
-    unsigned char cells[(SNAKE_MATRIX_SIZE * SNAKE_CELL_MAX_BITS) / 8U];
-    char head_xpos;
-    char head_ypos;
-    char tail_xpos;
-    char tail_ypos;
-    char next_dir;
-    char inhibit_tail_step;
-    unsigned occupied_cells;
-} SnakeContext;
+#define SDL_WINDOW_WIDTH        640
+#define SDL_WINDOW_HEIGHT       960
 
 typedef struct
 {
@@ -63,30 +23,7 @@ typedef struct
     Uint64 last_step;
 } AppState;
 
-MainMenu* mainMenu = new MainMenu();
-
-static SDL_AppResult handle_key_event_(SnakeContext *ctx, SDL_Scancode key_code)
-{
-    switch (key_code) {
-    /* Quit. */
-    case SDL_SCANCODE_ESCAPE:
-    case SDL_SCANCODE_Q:
-        return SDL_APP_SUCCESS;
-    /* Restart the game as if the program was launched. */
-    case SDL_SCANCODE_R:
-    /* Decide new direction of the snake. */
-    case SDL_SCANCODE_RIGHT:
-    case SDL_SCANCODE_UP:
-        break;
-    case SDL_SCANCODE_LEFT:
-        break;
-    case SDL_SCANCODE_DOWN:
-        break;
-    default:
-        break;
-    }
-    return SDL_APP_CONTINUE;
-}
+Stage* stage = new GameStage(SDL_WINDOW_WIDTH, SDL_WINDOW_HEIGHT);
 
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
@@ -95,13 +32,13 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     // run game logic if we're at or past the time to run it.
     // if we're _really_ behind the time to run it, run it
     // several times.
-    while ((now - as->last_step) >= STEP_RATE_IN_MILLISECONDS) {
+    while ((now - as->last_step) >= 16) {
         // update logic
-        as->last_step += STEP_RATE_IN_MILLISECONDS;
+        as->last_step += 16;
     }
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(as->renderer);
-    mainMenu->tick();
+    stage->tick(16);
     SDL_RenderPresent(as->renderer);
     return SDL_APP_CONTINUE;
 }
@@ -149,7 +86,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     getRenderContext()->init(as->renderer);
 
-    mainMenu->init();
+    stage->init();
 
     as->last_step = SDL_GetTicks();
 
@@ -162,10 +99,10 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
     case SDL_EVENT_QUIT:
         return SDL_APP_SUCCESS;
     case SDL_EVENT_KEY_DOWN: {
-        mainMenu->handleEvent(event);
         // return handle_key_event_(ctx, event->key.scancode);
     }
     }
+    // stage->handleEvent(event);
     return SDL_APP_CONTINUE;
 }
 

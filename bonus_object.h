@@ -10,7 +10,7 @@ public:
         speed_ = 0.0f;
     }
     virtual void draw() override {
-        if(!valid_) {
+        if(!active_) {
             return;
         }
         auto context = getRenderContext();
@@ -21,6 +21,6 @@ public:
     }
 
     virtual void onHit(Object const* other) override {
-        valid_ = false;
+        active_ = false;
     }
 };

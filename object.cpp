@@ -16,9 +16,12 @@ void Object::setDirection(int x, int y) {
     direction_.y = y;
 }
 
-void Object::update(float deltaTime) {
-    pos_.x += direction_.x * speed_ * deltaTime;
-    pos_.y += direction_.y * speed_ * deltaTime;
+void Object::update(int64_t millisec) {
+    if(!active_) {
+        return;
+    }
+    pos_.x += direction_.x * speed_ * (float)millisec / 1000.0f;
+    pos_.y += direction_.y * speed_ * (float)millisec / 1000.0f;
 }
 
 bool Object::hitTest(Object const& other) const {

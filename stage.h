@@ -14,7 +14,7 @@ public:
 
     virtual bool init();
 
-    virtual void tick();
+    virtual void tick(int64_t);
 
     virtual void addObject(Object* object) {
         _objects.insert(object);

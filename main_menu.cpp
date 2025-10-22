@@ -10,8 +10,8 @@ static const int MenuSizeUnselect = 64;
 MainMenu::MainMenu() {
 }
 
-void MainMenu::tick() {
-    Stage::tick();
+void MainMenu::tick(int64_t millisec) {
+    Stage::tick(millisec);
 }
 
 bool MainMenu::init() {

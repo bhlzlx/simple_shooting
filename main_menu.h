@@ -14,7 +14,7 @@ public:
     MainMenu();
     
     virtual bool init() override;
-    virtual void tick() override;
+    virtual void tick(int64_t millisec) override;
     virtual void handleEvent(SDL_Event* event) override;
 
     ~MainMenu();

@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 
 class Stage;
 
@@ -7,7 +8,7 @@ struct vec2_t {
     float y;
 };
 
-enum ObjectType {
+enum class ObjectType {
     Plane,
     Bullet,
 };
@@ -24,7 +25,10 @@ public:
     Object(Stage* stage);
     void setPos(int x, int y);
     void setDirection(int x, int y);
-    void update(float deltaTime);
+    void setSpeed(float speed) {
+        speed_ = speed;
+    }
+    void update(int64_t millisec);
     bool active() const {
         return active_;
     }
