@@ -19,12 +19,15 @@ protected:
     vec2_t  direction_;
     float   radius_;
     float   speed_;
-    bool    valid_;
+    bool    active_;
 public:
     Object(Stage* stage);
     void setPos(int x, int y);
     void setDirection(int x, int y);
     void update(float deltaTime);
+    bool active() const {
+        return active_;
+    }
     virtual void draw() = 0;
     virtual bool hitTest(Object const& other) const;
     virtual void onHit(Object const* other) = 0;

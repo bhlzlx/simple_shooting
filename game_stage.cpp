@@ -1,4 +1,5 @@
 #include "game_stage.h"
+#include <SDL3/SDL.h>
 #include "object.h"
 
 GameStage::GameStage(int width, int height) {
@@ -17,18 +18,37 @@ bool GameStage::init() {
 }
 void GameStage::tick() {
     Stage::tick();
-    arrayObjects_.clear();
+    activeObjects_.clear();
+    inactiveObjects_.clear();
     for (auto object : _objects) {
-        arrayObjects_.push_back(object);
+        if(object->active()) {
+            activeObjects_.push_back(object);
+        } else {
+            inactiveObjects_.push_back(object);
+        }
+    }
+    for(auto object : inactiveObjects_) {
+        if(object == player_) {
+            continue;
+        }
     }
     // hit test all array objects
-    for (size_t i = 0; i < arrayObjects_.size(); i++) {
-        for (size_t j = i + 1; j < arrayObjects_.size(); j++) {
-            if (arrayObjects_[i]->hitTest(*arrayObjects_[j])) {
+    for (size_t i = 0; i < activeObjects_.size(); i++) {
+        for (size_t j = i + 1; j < activeObjects_.size(); j++) {
+            if (activeObjects_[i]->hitTest(*activeObjects_[j])) {
                 // TODO: handle hit
             }
         }
     }
+}
+
+void GameStage::addObject(Object* object) {
+    Stage::addObject(object);
+}
+
+void GameStage::addPlayer(Object* player) {
+    addObject(player);
+    player_ = player;
 }
 
 void GameStage::handleEvent(SDL_Event* event) {

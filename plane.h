@@ -4,6 +4,7 @@
 
 class Plane : public Object {
 private:
+    int                 life_;
     int64_t             shootInterval_;
     int64_t             timeLastShoot_;
 public:

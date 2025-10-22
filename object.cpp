@@ -4,7 +4,7 @@
 
 Object::Object(Stage* stage) {
     stage_ = stage;
-    valid_ = true;
+    active_ = true;
 }
 
 void Object::setPos(int x, int y) {
@@ -22,6 +22,9 @@ void Object::update(float deltaTime) {
 }
 
 bool Object::hitTest(Object const& other) const {
+    if(!active_ || !other.active_) {
+        return false;
+    }
     auto ref = pow(other.pos_.x - pos_.x, 2) + pow(other.pos_.y - pos_.y, 2);
     if(ref < pow(radius_+other.radius_, 2)) {
         return true;

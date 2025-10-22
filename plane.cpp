@@ -9,10 +9,11 @@ void Plane::draw() {
 }
 
 void Plane::onHit(Object const* other) {
-
+    active_ = false;
 }
-bool Plane::hitTest(Object const& other) const {
-    return false;
+
+bool Plane::hitTest(Object const& other) const{
+    return Object::hitTest(other);
 }
 
 void Plane::shoot() {
