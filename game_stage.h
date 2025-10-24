@@ -6,11 +6,9 @@ class GameStage : public Stage {
 private:
     std::vector<Object*>    activeObjects_;
     std::vector<Object*>    inactiveObjects_;
-    int                     width_;
-    int                     height_;
     Object*                 player_;
 public:
-    GameStage(int width, int height);
+    GameStage(vec2_t size);
     ~GameStage();
 
     bool init() override;

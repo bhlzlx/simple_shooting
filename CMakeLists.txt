@@ -16,6 +16,7 @@ add_executable(HelloSDL3
     ${CMAKE_CURRENT_SOURCE_DIR}/stage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/object.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/plane.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/bullet.cpp
     # ${CMAKE_CURRENT_SOURCE_DIR}/bonus_object.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/main_menu.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text_object.cpp

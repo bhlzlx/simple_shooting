@@ -1,16 +1,15 @@
 #include "game_stage.h"
 #include "object.h"
 #include "plane.h"
+#include "bonus_object.h"
 #include <SDL3/SDL.h>
 
-GameStage::GameStage(int width, int height)
-    : Stage()
+GameStage::GameStage(vec2_t size)
+    : Stage(size)
     , player_(nullptr)
     , activeObjects_()
     , inactiveObjects_()
 {
-    width_ = width;
-    height_ = height;
 }
 
 GameStage::~GameStage() {
@@ -22,16 +21,20 @@ bool GameStage::init() {
     }
     // add a plane
     auto plane = new Plane(this);
-    plane->setPos(320, 320);
-    plane->setSpeed(2);
+    plane->setPos({size_.x / 2, size_.y});
+    plane->setSpeed(200);
     addPlayer(plane);
+    // bonus
+    auto bonus = new BonusObject(this, {size_.x / 2, 0});
+    addObject(bonus);
     return true;
 }
 void GameStage::tick(int64_t millisec) {
     if(player_) {
+        Plane* plane = (Plane*)player_;
         const bool *keyStates = SDL_GetKeyboardState(NULL);
         // wasd 
-        auto x = 0, y = 0;
+        float x = 0, y = 0;
         if(keyStates[SDL_SCANCODE_W]) {
             y = -1;
         }
@@ -44,14 +47,21 @@ void GameStage::tick(int64_t millisec) {
         if(keyStates[SDL_SCANCODE_D]) {
             x = 1;
         }
-        player_->setDirection(x, y);
+        // press j shoot
+        if(keyStates[SDL_SCANCODE_J]) {
+            auto bullets = plane->shoot();
+            for(auto bullet : bullets) {
+                addObject(bullet);
+            }
+        }
+        player_->setMoveDir({x, y});
     }
 
     Stage::tick(millisec);
 
     activeObjects_.clear();
     inactiveObjects_.clear();
-    for (auto object : _objects) {
+    for (auto object : objects_) {
         if(object->active()) {
             activeObjects_.push_back(object);
         } else {
@@ -60,26 +70,34 @@ void GameStage::tick(int64_t millisec) {
     }
     for(auto object : inactiveObjects_) {
         if(object == player_) {
+            // game over
             continue;
         }
+        removeObject(object);
+        delete object;
     }
     // hit test all array objects
     for (size_t i = 0; i < activeObjects_.size(); i++) {
         for (size_t j = i + 1; j < activeObjects_.size(); j++) {
             if (activeObjects_[i]->hitTest(*activeObjects_[j])) {
-                // TODO: handle hit
+                activeObjects_[i]->onHit(activeObjects_[j]);
+                activeObjects_[j]->onHit(activeObjects_[i]);
             }
         }
     }
 }
 
 void GameStage::addObject(Object* object) {
-    Stage::addObject(object);
+    if(objects_.find(object) == objects_.end()) {
+        Stage::addObject(object);
+    }
 }
 
 void GameStage::addPlayer(Object* player) {
-    addObject(player);
-    player_ = player;
+    if(nullptr == player_) {
+        addObject(player);
+        player_ = player;
+    }
 }
 
 void GameStage::handleEvent(SDL_Event* event) {

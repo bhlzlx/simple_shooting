@@ -7,7 +7,8 @@
 static const int MenuSizeSelect = 80;
 static const int MenuSizeUnselect = 64;
 
-MainMenu::MainMenu() {
+MainMenu::MainMenu(vec2_t size)
+: Stage(size) {
 }
 
 void MainMenu::tick(int64_t millisec) {
@@ -23,14 +24,14 @@ bool MainMenu::init() {
     int sizes[] = {MenuSizeSelect, MenuSizeUnselect};
     for (int i = 0; i < 2; i++) {
         auto textObj = new TextObject(this, items[i], sizes[i]);
-        textObj->setPos(120, (int)100 + i * 80);
+        textObj->setPos({120, 100.0f + i * 80});
         menuItems_.push_back(textObj);
         addObject(textObj);
     }
     selected_ = 0;
     //
-    auto bonusObj = new BonusObject(this);
-    bonusObj->setPos(200, 200);
+    auto bonusObj = new BonusObject(this, vec2_t{size_.x / 2, 0});
+    bonusObj->setPos({200, 200});
     addObject(bonusObj);
 
     return true;

@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cstdint>
 
 class Stage;
@@ -9,26 +10,41 @@ struct vec2_t {
 };
 
 enum class ObjectType {
+    None,
+    Text,
     Plane,
     Bullet,
+    Bonus,
+};
+
+enum class BonusType {
+    ShootLevel, // bullet shoot interval & shoot speed
+    BulletLevel, // shooting style level
 };
 
 class Object {
 protected:
     Stage*  stage_;
     vec2_t  pos_;
-    vec2_t  direction_;
+    vec2_t  moveDir_;
     float   radius_;
     float   speed_;
     bool    active_;
+    ObjectType type_;
 public:
-    Object(Stage* stage);
-    void setPos(int x, int y);
-    void setDirection(int x, int y);
+    Object(Stage* stage, ObjectType type = ObjectType::None);
+    void setPos(vec2_t pos);
+    void setMoveDir(vec2_t dir);
     void setSpeed(float speed) {
         speed_ = speed;
     }
-    void update(int64_t millisec);
+    void setRadius(float val) {
+        radius_ = val;
+    }
+    ObjectType type() const {
+        return type_;
+    }
+    virtual void update(int64_t millisec);
     bool active() const {
         return active_;
     }

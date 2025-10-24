@@ -2,26 +2,25 @@
 
 #include <cmath>
 
-Object::Object(Stage* stage) {
+Object::Object(Stage* stage, ObjectType type) {
     stage_ = stage;
     active_ = true;
+    type_ = type;
 }
 
-void Object::setPos(int x, int y) {
-    pos_.x = x;
-    pos_.y = y;
+void Object::setPos(vec2_t pos) {
+    pos_ = pos;
 }
-void Object::setDirection(int x, int y) {
-    direction_.x = x;
-    direction_.y = y;
+void Object::setMoveDir(vec2_t dir) {
+    moveDir_ = dir;
 }
 
 void Object::update(int64_t millisec) {
     if(!active_) {
         return;
     }
-    pos_.x += direction_.x * speed_ * (float)millisec / 1000.0f;
-    pos_.y += direction_.y * speed_ * (float)millisec / 1000.0f;
+    pos_.x += moveDir_.x * speed_ * (float)millisec / 1000.0f;
+    pos_.y += moveDir_.y * speed_ * (float)millisec / 1000.0f;
 }
 
 bool Object::hitTest(Object const& other) const {

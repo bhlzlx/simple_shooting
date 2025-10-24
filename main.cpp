@@ -8,7 +8,6 @@
 #define SDL_MAIN_USE_CALLBACKS 1 /* use the callbacks instead of main() */
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-// #include <SDL3/SDL_ttf.h>
 #include "render_context.h"
 // #include "main_menu.h"
 #include "game_stage.h"
@@ -20,25 +19,23 @@ typedef struct
 {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    Uint64 last_step;
+    Uint64 lastTick;
 } AppState;
 
-Stage* stage = new GameStage(SDL_WINDOW_WIDTH, SDL_WINDOW_HEIGHT);
+Stage* stage = new GameStage(vec2_t{SDL_WINDOW_WIDTH, SDL_WINDOW_HEIGHT});
 
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
     AppState *as = (AppState *)appstate;
     const Uint64 now = SDL_GetTicks();
-    // run game logic if we're at or past the time to run it.
-    // if we're _really_ behind the time to run it, run it
-    // several times.
-    while ((now - as->last_step) >= 16) {
-        // update logic
-        as->last_step += 16;
+    if(now - as->lastTick < 16) {
+        return SDL_APP_CONTINUE;
     }
+    auto interval = now - as->lastTick;
+    as->lastTick = now;
     SDL_SetRenderDrawColor(as->renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(as->renderer);
-    stage->tick(16);
+    stage->tick(interval);
     SDL_RenderPresent(as->renderer);
     return SDL_APP_CONTINUE;
 }
@@ -49,9 +46,9 @@ static const struct
     const char *value;
 } extended_metadata[] =
 {
-    { SDL_PROP_APP_METADATA_URL_STRING, "https://examples.libsdl.org/SDL3/demo/01-snake/" },
-    { SDL_PROP_APP_METADATA_CREATOR_STRING, "SDL team" },
-    { SDL_PROP_APP_METADATA_COPYRIGHT_STRING, "Placed in the public domain" },
+    { SDL_PROP_APP_METADATA_URL_STRING, "shooting game" },
+    { SDL_PROP_APP_METADATA_CREATOR_STRING, "OK" },
+    { SDL_PROP_APP_METADATA_COPYRIGHT_STRING, "OK" },
     { SDL_PROP_APP_METADATA_TYPE_STRING, "game" }
 };
 
@@ -59,7 +56,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 {
     size_t i;
 
-    if (!SDL_SetAppMetadata("Example Snake game", "1.0", "com.example.Snake")) {
+    if (!SDL_SetAppMetadata("GAME", "1.0", "you!")) {
         return SDL_APP_FAILURE;
     }
 
@@ -88,7 +85,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     stage->init();
 
-    as->last_step = SDL_GetTicks();
+    as->lastTick = SDL_GetTicks();
 
     return SDL_APP_CONTINUE;
 }

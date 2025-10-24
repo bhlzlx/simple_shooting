@@ -12,7 +12,7 @@ class TextObject : public Object {
     bool                        dirty_;
 public:
     TextObject(Stage* stage, std::string txt, int size) 
-        : Object(stage)
+        : Object(stage, ObjectType::Text)
         , text_(txt)
         , size_(size)
         , ttf_(nullptr)

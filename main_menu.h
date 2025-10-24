@@ -11,7 +11,7 @@ private:
 private:
     void setSelection(int index);
 public:
-    MainMenu();
+    MainMenu(vec2_t size);
     
     virtual bool init() override;
     virtual void tick(int64_t millisec) override;
