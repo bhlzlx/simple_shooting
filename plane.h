@@ -14,11 +14,11 @@ public:
     Plane(Stage* stage);
     virtual void draw();
     virtual void onHit(Object const* other);
-    bool hitTest(Object const& other) const;
+    bool hitTest(Object const* other) const;
 
     void setShootLevel(int level) {
         shootLevel_ = level;
-        shootInterval_ = 200 - 40 * shootLevel_;
+        shootInterval_ = 1000 - 40 * shootLevel_;
     }
     float bulletSpeed() const {
         return shootLevel_ * 200.f + 400.f;

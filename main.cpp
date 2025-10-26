@@ -99,7 +99,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
         // return handle_key_event_(ctx, event->key.scancode);
     }
     }
-    // stage->handleEvent(event);
+    stage->handleEvent(event);
     return SDL_APP_CONTINUE;
 }
 

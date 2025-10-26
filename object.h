@@ -14,6 +14,7 @@ enum class ObjectType {
     Text,
     Plane,
     Bullet,
+    Enemy,
     Bonus,
 };
 
@@ -49,6 +50,6 @@ public:
         return active_;
     }
     virtual void draw() = 0;
-    virtual bool hitTest(Object const& other) const;
+    virtual bool hitTest(Object const* other) const;
     virtual void onHit(Object const* other) = 0;
 };

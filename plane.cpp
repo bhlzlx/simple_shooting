@@ -2,6 +2,7 @@
 #include "render_context.h"
 #include "bullet.h"
 #include "game_stage.h"
+#include "bonus_object.h"
 #include <cmath>
 
 Plane::Plane(Stage* stage) : Object(stage, ObjectType::Plane) {
@@ -10,7 +11,7 @@ Plane::Plane(Stage* stage) : Object(stage, ObjectType::Plane) {
     life_ = 5;
     shootTimestamp_ = 0;
     setShootLevel(0);
-    setBulletLevel(2);
+    setBulletLevel(0);
 }
 void Plane::draw() {
     if(!active_) {
@@ -24,13 +25,30 @@ void Plane::draw() {
 }
 
 void Plane::onHit(Object const* other) {
-    life_--;
-    if(life_ <= 0) {
-        active_ = false;
+    switch(other->type()) {
+    case ObjectType::Bullet:
+        life_--;
+        if(life_ <= 0) {
+            active_ = false;
+        }
+        break; 
+    case ObjectType::Bonus: {
+        BonusObject const* bonus = dynamic_cast<BonusObject const*>(other); 
+        if(bonus) {
+            if(bonus->bonusType() == BonusType::BulletLevel) {
+                bulletLevel_++;
+                bulletLevel_ = std::min(bulletLevel_, 4);
+            } else if(bonus->bonusType() == BonusType::ShootLevel) {
+                shootLevel_++;
+                shootLevel_ = std::min(shootLevel_, 4);
+            }
+        }
+        break;
+    }
     }
 }
 
-bool Plane::hitTest(Object const& other) const{
+bool Plane::hitTest(Object const* other) const{
     return Object::hitTest(other);
 }
 

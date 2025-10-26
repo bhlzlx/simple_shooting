@@ -30,9 +30,9 @@ bool MainMenu::init() {
     }
     selected_ = 0;
     //
-    auto bonusObj = new BonusObject(this, vec2_t{size_.x / 2, 0});
-    bonusObj->setPos({200, 200});
-    addObject(bonusObj);
+    // auto bonusObj = new BonusObject(this, vec2_t{size_.x / 2, 0});
+    // bonusObj->setPos({200, 200});
+    // addObject(bonusObj);
 
     return true;
 }
