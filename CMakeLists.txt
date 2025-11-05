@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 
 project(HelloSDL3)
 
-add_subdirectory(SDL3-3.2.24)
 # add_subdirectory(SDL_ttf-main)
 
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/SDL3_ttf-3.2.2/cmake")    
 
-set(SDL3_ttf_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SDL3_ttf-3.2.2/cmake)
+set(SDL3_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SDL3-3.3.2/cmake)
+set(SDL3_ttf_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SDL3_ttf-3.2.2/cmake)
 
 find_package(SDL3_ttf REQUIRED)
+find_package(SDL3 REQUIRED)
 
 add_executable(HelloSDL3
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
@@ -27,12 +28,14 @@ add_executable(HelloSDL3
 target_include_directories(HelloSDL3
 PRIVATE
     ${SDL3_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/SDL3_ttf-3.2.2/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SDL3_ttf-3.2.2/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/SDL3-3.3.2/include
 )
 
 target_link_libraries(HelloSDL3
 PRIVATE
-    SDL3-shared
-    SDL_uclibc
+    # SDL3::SDL3-static
+    SDL3::SDL3-shared
     SDL3_ttf::SDL3_ttf-shared
+    # SDL_uclibc
 )
